@@ -31,7 +31,10 @@ public class WebServiceServerApplication {
     RouterFunction<ServerResponse> http() {
         return route()
                 .GET("/message1", serverRequest -> {
-                    List<WelcomeMessage> welcomeMessages = Arrays.asList(new WelcomeMessage("Reactive style webservice", LocalDateTime.now()));
+                    List<WelcomeMessage> welcomeMessages = Arrays.asList(
+                            new WelcomeMessage("ONE-Reactive style webservice", LocalDateTime.now()),
+                            new WelcomeMessage("TWO-Reactive style webservice", LocalDateTime.now())
+                    );
                     Flux<WelcomeMessage> welcomeMessageFlux = Flux.fromStream(welcomeMessages.stream())
                             .delayElements(Duration.ofSeconds(1));
                     return ServerResponse.ok().body(welcomeMessageFlux, WelcomeMessage.class);
