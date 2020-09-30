@@ -45,11 +45,7 @@ public class WebServiceServerApplication {
 class Api {
     @GetMapping(value = "/message", produces = MediaType.APPLICATION_JSON_VALUE)
     public Flux<WelcomeMessage> getMessage() {
-        //List<WelcomeMessage> welcomeMessages = Arrays.asList();
         return Flux.just(new WelcomeMessage("Traditional style of building rest", LocalDateTime.now()));
-        /*return Flux.fromStream(welcomeMessages.stream())
-                .limitRate(1)
-                .delayElements(Duration.ofSeconds(1));*/
     }
 }
 
