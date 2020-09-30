@@ -12,10 +12,7 @@ import org.springframework.web.reactive.function.server.RouterFunction;
 import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Flux;
 
-import java.time.Duration;
 import java.time.LocalDateTime;
-import java.util.Arrays;
-import java.util.List;
 
 import static org.springframework.web.reactive.function.server.RouterFunctions.route;
 
@@ -31,12 +28,10 @@ public class WebServiceServerApplication {
     RouterFunction<ServerResponse> http() {
         return route()
                 .GET("/message1", serverRequest -> {
-                    List<WelcomeMessage> welcomeMessages = Arrays.asList(
+                    Flux<WelcomeMessage> welcomeMessageFlux = Flux.just(
                             new WelcomeMessage("ONE-Reactive style webservice", LocalDateTime.now()),
                             new WelcomeMessage("TWO-Reactive style webservice", LocalDateTime.now())
                     );
-                    Flux<WelcomeMessage> welcomeMessageFlux = Flux.fromStream(welcomeMessages.stream())
-                            .delayElements(Duration.ofSeconds(1));
                     return ServerResponse.ok().body(welcomeMessageFlux, WelcomeMessage.class);
                 })
                 .build();
@@ -50,10 +45,11 @@ public class WebServiceServerApplication {
 class Api {
     @GetMapping(value = "/message", produces = MediaType.APPLICATION_JSON_VALUE)
     public Flux<WelcomeMessage> getMessage() {
-        List<WelcomeMessage> welcomeMessages = Arrays.asList(new WelcomeMessage("Traditional style of building rest", LocalDateTime.now()));
-        return Flux.fromStream(welcomeMessages.stream())
+        //List<WelcomeMessage> welcomeMessages = Arrays.asList();
+        return Flux.just(new WelcomeMessage("Traditional style of building rest", LocalDateTime.now()));
+        /*return Flux.fromStream(welcomeMessages.stream())
                 .limitRate(1)
-                .delayElements(Duration.ofSeconds(1));
+                .delayElements(Duration.ofSeconds(1));*/
     }
 }
 
